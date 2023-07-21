@@ -1,0 +1,9 @@
+.todo-list-item {
+    margin: 0.5rem;
+
+    color: red;
+}
+
+.todo-list-item > button {
+    margin-left: 0.5rem;
+}
