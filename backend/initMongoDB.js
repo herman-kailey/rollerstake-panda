@@ -9,7 +9,6 @@ module.exports = () => {
         })
         .catch(err => console.log(err.message)); //on failed connection
   
-    //logs for each connection/disconnect/error made via requests
     mongoose.connection.on('connected', () => {
         console.log('Mongoose connected to db...');
     });

@@ -4,14 +4,16 @@ const mongoose = require('mongoose');
 const Item = require('../models/item');
 
 module.exports = {
+
     getAllItems: async (req, res, next) => {
         try {
-            const results = await Item.find();
-            res.send(results);
+            const results = await Item.find({}, { id: 1, name: 1, isComplete: 1, _id: 0});
+            res.send({body: results});
         } catch (error) {
             console.log(error.message);
         }
     },
+
 
     createItem: async (req, res, next) => {
         try {
@@ -48,7 +50,6 @@ module.exports = {
 
     deleteItem: async (req, res, next) => {
         try {
-            //can not use findByIDAndDelete because we are using our custom id
             await Item.deleteOne({ id: `${req.params.id}`})
         } catch (error) {
             console.log(error.message);

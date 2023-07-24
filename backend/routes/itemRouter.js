@@ -9,7 +9,7 @@ router.get('/', itemController.getAllItems);
 router.post('/', itemController.createItem);
 
 //Update the item with the matching id
-router.patch('/:id', itemController.updateItem);
+router.put('/:id', itemController.updateItem);
 
 //Delete the item with the matching id
 router.delete('/:id', itemController.deleteItem);

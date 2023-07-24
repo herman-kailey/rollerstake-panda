@@ -7,8 +7,13 @@ const createError = require('http-errors');
 const server = express();
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
+//app.use(express.text()) NOTE: the frontend requires that our API use text/plain content-type
+//                              but it wouldnt make sense for it to give us a JSON.stringify(body)
+//                              as plain text so it's better to change the frontend headers than
+//                              make our backend messy by trying to use a hybrid of plain/text and json 
 
-//init mongo database
+
+//init mongodb/mongoose connection
 require('./initMongoDB.js')();
 
 //set up routes
@@ -31,8 +36,8 @@ server.use((err, req, res, next) => {
     });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
-    console.log('Server started on port ' + PORT + '...');
+    console.log('Server started on port: ' + PORT);
 });
