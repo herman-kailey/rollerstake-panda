@@ -1,7 +1,9 @@
+const mongoose = require('mongoose');
+
 module.exports = () => {
 
-    //Init our mongoose conneecttion
-    mongoose.connect(process.env.MONGODB_URI, {dbName: process.env.DB_NAME})
+    //Init our mongoose connection
+    mongoose.connect(process.env.MONGO_URI, {dbName: process.env.DB_NAME})
         .then(() => {
             console.log('Mongodb connected....'); //on successful connection
         })

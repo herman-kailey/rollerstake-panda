@@ -16,8 +16,7 @@ module.exports = {
     createItem: async (req, res, next) => {
         try {
             const item = new Item(req.body);
-            const result = await item.save();
-            res.send(result);
+            await item.save();
         } catch (error) {
             console.log(error.message);
             if (error.name === 'ValidationError') {
@@ -31,15 +30,12 @@ module.exports = {
 
     updateItem: async (req, res, next) => {
         try {
-            const id = req.params.id;
+            const filter = { id: `${req.params.id}`};
             const updatedItem = req.body;
-            const options = { new: true }; //so we can return the modified document
-
-            const result = await Item.findByIdAndUpdate(id, updatedItem, options);
-            if (!result) {
-                throw createError(404, 'Item does not exist');
-            }
-            res.send(result);
+            //note: Normally it is best to avoid updateOne/findbyidandXYZ and instead use item.find().save()
+            //but in this case we do not have any schema validation to worry about as those functions
+            //will skip any schema validation.
+            await Item.updateOne(filter, updatedItem);
         } catch (error) {
             console.log(error.message);
             if (error instanceof mongoose.CastError) {
@@ -52,12 +48,8 @@ module.exports = {
 
     deleteItem: async (req, res, next) => {
         try {
-            const id = req.params.id;
-            const result = await Item.findByIdAndDelete(id);
-            if (!result) {
-                throw createError(404, 'Item does not exist.');
-            }
-            res.send(result);
+            //can not use findByIDAndDelete because we are using our custom id
+            await Item.deleteOne({ id: `${req.params.id}`})
         } catch (error) {
             console.log(error.message);
             if (error instanceof mongoose.CastError) {

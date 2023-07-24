@@ -1,0 +1,26 @@
+services:
+  mongo_db:
+    container_name: mongodb_container
+    image: mongo:latest
+    restart: always
+    ports: 
+      - 2717:27017
+    volumes:
+      - mongo_db:/data/db
+
+  api:
+    container_name: node_api_container
+    build: .
+    volumes:
+      - .:/usr/pg/ratehubTest
+    ports:
+      - 3001:3000
+    environment:
+      PORT: 3000
+      MONGO_URI: mongodb://mongo_db:27017
+      DB_NAME: todolistdb
+    depends_on:
+      - mongo_db
+
+volumes: #remove if you dont want the data to persist
+  mongo_db: {}
