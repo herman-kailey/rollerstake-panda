@@ -10,8 +10,12 @@ import { SERVICE_URL } from "../definitions/Config"
  * @returns {Promise<void>}
  */
 export default async function pushNewItem(item) {
+    console.log(JSON.stringify(item)) //TODO remove
     return fetch(SERVICE_URL, {
         method: 'POST',
         body: JSON.stringify(item),
+        headers: {
+            "Content-Type": "application/json",
+        }
     })
 }
