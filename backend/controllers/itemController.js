@@ -5,6 +5,7 @@ const Item = require('../models/item');
 
 module.exports = {
 
+    //Retrieves all items from the db table
     getAllItems: async (req, res, next) => {
         try {
             const results = await Item.find({}, { id: 1, name: 1, isComplete: 1, _id: 0});
@@ -16,6 +17,7 @@ module.exports = {
     },
 
 
+    //inserts the request body item object into the db table
     createItem: async (req, res, next) => {
         try {
             const item = new Item(req.body);
@@ -32,6 +34,7 @@ module.exports = {
     },
 
 
+    //Updating the item document with the matching id 
     updateItem: async (req, res, next) => {
         try {
             const filter = { id: `${req.params.id}`};
@@ -53,7 +56,7 @@ module.exports = {
         }
     },
     
-
+    //Delete the item document with the matching id 
     deleteItem: async (req, res, next) => {
         try {
             const result = await Item.deleteOne({ id: `${req.params.id}`})
