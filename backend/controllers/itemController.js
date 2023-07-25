@@ -8,7 +8,8 @@ module.exports = {
     getAllItems: async (req, res, next) => {
         try {
             const results = await Item.find({}, { id: 1, name: 1, isComplete: 1, _id: 0});
-            res.send({body: results});
+            
+            res.send({status: 200, body: results});
         } catch (error) {
             console.log(error.message);
         }
@@ -19,6 +20,7 @@ module.exports = {
         try {
             const item = new Item(req.body);
             await item.save();
+            res.send({ status: 200});
         } catch (error) {
             console.log(error.message);
             if (error.name === 'ValidationError') {
@@ -37,7 +39,11 @@ module.exports = {
             //note: Normally it is best to avoid updateOne/findbyidandXYZ and instead use item.find().save()
             //but in this case we do not have any schema validation to worry about as those functions
             //will skip any schema validation.
-            await Item.updateOne(filter, updatedItem);
+            result = await Item.updateOne(filter, updatedItem);
+            if (!result) {
+                throw createError(404, 'Item does not exist');
+            }
+            res.send({ status: 200});
         } catch (error) {
             console.log(error.message);
             if (error instanceof mongoose.CastError) {
@@ -50,7 +56,10 @@ module.exports = {
 
     deleteItem: async (req, res, next) => {
         try {
-            await Item.deleteOne({ id: `${req.params.id}`})
+            const result = await Item.deleteOne({ id: `${req.params.id}`})
+            if (result.deleteCount > 0) {
+                res.send({ status: 200});
+            }
         } catch (error) {
             console.log(error.message);
             if (error instanceof mongoose.CastError) {
